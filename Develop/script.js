@@ -1,6 +1,51 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
+$(document).ready(function(){
+
+    $(".saveBtn").on("click", function(){
+      let value = $(this).siblings('.description').val();
+      let time = $(this).parent().attr("id");
+
+      localStorage.setItem(time, value);
+
+      $(".notification").addClass('show');
+
+      setTimeout(function(){
+        $(".notification").removeClass('show');
+
+      }, 5000);
+
+    });
+
+    function hourUpdate(){
+      let currentHour = dayjs.duration().hours();
+
+      $('.time-block').each(function(){
+        let blockHour = parseInt($(this).attr("id").split("-")[1]);
+
+        if(blockHour < currentHour){
+          $(this).addClass("past");
+
+        } else if(blockHour === currentHour){
+          $(this).removeClass("past");
+
+        } else {
+          $(this).removeClass("past");
+          $(this).removeClass("present");
+          $(this).addClass("future");
+        }
+      })
+    }
+  
+  hourUpdate()
+
+  let interval = setInterval(hourUpdate, 15000)
+ 
+});
+
+
+
 $(function () {
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
